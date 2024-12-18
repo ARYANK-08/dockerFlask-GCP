@@ -1,0 +1,3 @@
+*.dockerfile linguist-language=Docker
+*.python linguist-language=Python
+*.html linguist-detectable=false
