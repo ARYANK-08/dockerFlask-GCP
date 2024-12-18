@@ -1,9 +1,9 @@
 name: Deploy to Cloud Run
 
 env:
-  SERVICE_NAME: flaskimg
-  PROJECT_ID: h-t-d-a-f-a-t-g-c-r
-  DOCKER_IMAGE_URL: europe-west4-docker.pkg.dev/h-t-d-a-f-a-t-g-c-r/flaskimg/flaskimg
+  SERVICE_NAME: flaskgithub
+  PROJECT_ID: flaskdockerdeploy
+  DOCKER_IMAGE_URL: europe-west4-docker.pkg.dev/flaskdockerdeploy/flaskdocker/flaskimg
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE_URL }}:latest -f Dockerfile .  # Or Dockerfile.prod
+          docker build -t ${{ env.DOCKER_IMAGE_URL }}:latest -f Dockerfile.prod .
           docker push ${{ env.DOCKER_IMAGE_URL }}:latest
 
       - name: Deploy to Cloud Run
@@ -45,5 +45,5 @@ jobs:
           gcloud run deploy $SERVICE_NAME \
             --image ${{ env.DOCKER_IMAGE_URL }}:latest \
             --platform managed \
-            --region europe-west4 \
-            --allow-unauthenticated  # Modify this if needed
+            --region us-east1 \
+            --allow-unauthenticated
