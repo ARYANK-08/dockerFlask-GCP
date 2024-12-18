@@ -1,6 +1,8 @@
 # **Deploying a Flask App to GCP using Docker and CI/CD**
 
-![download (3)](https://github.com/user-attachments/assets/06088f3b-dd19-4798-b7be-2f5358f179eb)
+| **Anime Docker** 🐳 | **Website Live** 🌐 |
+|:---:|:---:|
+| ![Anime Docker](https://github.com/user-attachments/assets/06088f3b-dd19-4798-b7be-2f5358f179eb) | ![Website Live](https://github.com/user-attachments/assets/5130e4fd-c189-4341-80c0-a0760ddec4d0) |
 
 ### **Step 1: Create `requirements.txt`**
 First, list the dependencies for your Flask application in a `requirements.txt` file:
@@ -108,6 +110,54 @@ gcloud builds submit --tag europe-west4-docker.pkg.dev/flaskdockerdeploy/flaskdo
 ### **Step 12: Set up CI/CD Pipeline with GitHub**
 To automate deployments, connect your GitHub repository to GCP and set up a CI/CD pipeline using Cloud Build to push images to Artifact Registry and deploy them to Cloud Run.
 
+![Screenshot 2024-12-19 025528](https://github.com/user-attachments/assets/a8c26d30-a2fe-4add-9658-cee918947ecd)
+
+### Steps:
+1. **Create a Service Account in GCP (if not already):**
+   - Go to **IAM & Admin** > **Service Accounts**.
+   - Create a new service account.
+   - Grant the following roles:
+     - `Artifact Registry Writer`
+     - `Artifact Registry Create-on-Push Writer`
+     - `Cloud Run Admin`
+     - `Editor`
+     - `Logs Writer`
+     - `Service Account User`
+     - `Storage Object Viewer`
+   
+2. **Create and Download Service Account Key:**
+   - Go to **IAM & Admin** > **Service Accounts**.
+   - Create a key for your service account.
+   - Download the key as a JSON file.
+
+3. **Add Service Account Key to GitHub Secrets:**
+   - Go to your GitHub repository.
+   - Navigate to **Settings** > **Secrets and Variables** > **Actions**.
+   - Add a new secret called `GCP_SA_KEY` and paste the JSON key content there.
+
+4. **Create `cicd.yaml` for GitHub Actions:**
+   In your GitHub repository, create a file `.github/workflows/cicd.yaml` with the following content:
+
+![image](https://github.com/user-attachments/assets/74b31773-0e33-49c9-acff-0805306bed5a)
+
+
+### Key Points:
+- **Service Account Key (`GCP_SA_KEY`)** is stored as a secret in GitHub.
+- The GitHub Action triggers on every push to the `main` branch.
+- It builds the Docker image and pushes it to **Google Artifact Registry**.
+- Finally, it deploys the image to **Google Cloud Run**.
+
+### Don't Forget To:
+1. Replace `your-image-name`, `your-service-name`, and `your-region` with your actual values.
+2. Ensure the GCP project ID is stored in GitHub secrets (`GCP_PROJECT_ID`) for better security.
+3. This process will automatically deploy your updated Docker image to GCP whenever you push changes to the `main` branch.
+
+This setup is ready to automate your CI/CD workflow with GitHub and GCP.
+
+![Screenshot 2024-12-19 025004](https://github.com/user-attachments/assets/daa47d13-2eae-4fe9-aee7-5e07c2556f23)
+
+---
+
 ### **Step 13: Run Locally Using Docker**
 If you want to run the application locally using Docker, build and run it using the following commands:
 
@@ -117,4 +167,5 @@ docker run -p 8080:8080 europe-west4-docker.pkg.dev/flaskdockerdeploy/flaskdocke
 ```
 
 thanks maccha, hope it helps you! :)
+
 
