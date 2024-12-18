@@ -1,9 +1,10 @@
 name: Deploy to Cloud Run
 
 env:
-  SERVICE_NAME: custom-fastapi-service
+  SERVICE_NAME: githubflask
   PROJECT_ID: flaskdockerdeploy
   DOCKER_IMAGE_URL: europe-west4-docker.pkg.dev/flaskdockerdeploy/flaskdocker/flaskimg
+  IMAGE_TAG: europe-west4-docker.pkg.dev/flaskdockerdeploy/flaskdocker/flaskimg:${{ github.sha }} # Unique tag using commit SHA
 
 on:
   push:
@@ -36,14 +37,14 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE_URL }}:latest -f Dockerfile .
-          docker push ${{ env.DOCKER_IMAGE_URL }}:latest
+          docker build -t ${{ env.IMAGE_TAG }} -f Dockerfile .
+          docker push ${{ env.IMAGE_TAG }}
 
       - name: Deploy to Cloud Run
         run: |
           echo SERVICE_NAME $SERVICE_NAME
           gcloud run deploy $SERVICE_NAME \
-            --image ${{ env.DOCKER_IMAGE_URL }}:latest \
+            --image ${{ env.IMAGE_TAG }} \
             --platform managed \
             --region us-east1 \
             --allow-unauthenticated
