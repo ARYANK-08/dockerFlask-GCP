@@ -841,5 +841,6 @@ by default the delay on scale up events is 3minutes and delay on scale dwon is 5
 whats racing conditions?
 yaml
 limits are mandory : request:resoruces memrtoyr crpu 64mi 250m
-min and max replicates #   f l a s k _ g c p _ d o c k e r  
+min and max replicates #   f l a s k _ g c p _ d o c k e r 
+ 
  
