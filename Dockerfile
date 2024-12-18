@@ -1,16 +1,20 @@
+# Use a slim Python image as a base
 FROM python:3.10-slim-buster
 
 # Set the working directory inside the container
 WORKDIR /todo-app
 
-# Copy requirements first for caching
+# Copy the requirements file into the container
 COPY requirements.txt requirements.txt
 
-# Install dependencies
+# Install the dependencies in the container
 RUN pip3 install -r requirements.txt
 
-# Copy all files into the working directory
+# Copy the rest of your application code
 COPY . .
+
+# Expose port 8080
+EXPOSE 8080
 
 # Command to run the application
 CMD ["python", "app.py"]

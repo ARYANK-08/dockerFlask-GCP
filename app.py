@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import requests
 from collections import Counter
+import os
 
 app = Flask(__name__, template_folder='templates')
 
@@ -92,7 +93,6 @@ def compare():
         
     return render_template('index1.html')
 
-
-
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080)  # Hardcoded port 8080
+    port = int(os.environ.get("PORT", 8080))  # Get the PORT environment variable, default to 8080
+    app.run(host="0.0.0.0", port=port)  # Hardcoded port 8080
